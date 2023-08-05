@@ -20,6 +20,8 @@ const INITIAL_STATE = [
   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
 ];
 
+const localStorageKey = 'phonebook';
+
 export class App extends Component {
   state = {
     contacts: [...INITIAL_STATE],
@@ -29,20 +31,17 @@ export class App extends Component {
   };
 
   componentDidMount() {
-    const contactsLocalStorage = this.loadLocalStorage('phonebook') || [];
-    console.log('contacts From LocalStorage :>> ', contactsLocalStorage);
+    const contactsLocalStorage = this.loadLocalStorage('localStorageKey') || [];
     if (contactsLocalStorage.length === 0) {
-      console.log('this.state.contacts :>> ', this.state.contacts);
-      this.saveLocalStorage('phonebook', this.state.contacts);
+      this.saveLocalStorage('localStorageKey', this.state.contacts);
     } else {
-      console.log('in Local Storage find contacts:>> ', contactsLocalStorage);
       this.setState({ contacts: [...contactsLocalStorage] });
     }
   }
 
   componentDidUpdate(prevState) {
     if (this.state.contacts !== prevState.contacts) {
-      this.saveLocalStorage('phonebook', this.state.contacts);
+      this.saveLocalStorage('localStorageKey', this.state.contacts);
     }
   }
 
