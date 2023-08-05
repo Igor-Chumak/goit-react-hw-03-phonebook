@@ -28,6 +28,46 @@ export class App extends Component {
     notification: '',
   };
 
+  componentDidMount() {
+    const contactsLocalStorage = this.loadLocalStorage('phonebook') || [];
+    console.log('contacts From LocalStorage :>> ', contactsLocalStorage);
+    if (contactsLocalStorage) {
+      console.log('this.state.contacts :>> ', this.state.contacts);
+      this.saveLocalStorage('phonebook', this.state.contacts);
+    }
+    // this.setState(prevState => ({
+    //   contacts: [...prevState.contacts, ...contactsLocalStorage],
+    // }));
+  }
+
+  //   setState(prevState => {
+  //   this.state;
+  // });
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.contacts !== prevState.contacts) {
+  //     localStorage.setItem('phonebook', JSON.stringify(this.state.contacts));
+  //   }
+  // }
+
+  saveLocalStorage = (key, value) => {
+    try {
+      const serializedState = JSON.stringify(value);
+      localStorage.setItem(key, serializedState);
+    } catch (error) {
+      console.error('Set state error: ', error.message);
+    }
+  };
+
+  loadLocalStorage = key => {
+    try {
+      const serializedState = localStorage.getItem(key);
+      return serializedState === null ? undefined : JSON.parse(serializedState);
+    } catch (error) {
+      console.error('Get state error: ', error.message);
+    }
+  };
+
   handleToggleTheme = () => {
     this.setState(prevState => {
       return {
