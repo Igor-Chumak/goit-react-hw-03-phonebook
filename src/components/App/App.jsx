@@ -31,13 +31,13 @@ export class App extends Component {
   componentDidMount() {
     const contactsLocalStorage = this.loadLocalStorage('phonebook') || [];
     console.log('contacts From LocalStorage :>> ', contactsLocalStorage);
-    if (contactsLocalStorage) {
+    if (contactsLocalStorage.length === 0) {
       console.log('this.state.contacts :>> ', this.state.contacts);
       this.saveLocalStorage('phonebook', this.state.contacts);
+    } else {
+      console.log('in Local Storage find contacts:>> ', contactsLocalStorage);
+      this.setState({ contacts: [...contactsLocalStorage] });
     }
-    // this.setState(prevState => ({
-    //   contacts: [...prevState.contacts, ...contactsLocalStorage],
-    // }));
   }
 
   //   setState(prevState => {
