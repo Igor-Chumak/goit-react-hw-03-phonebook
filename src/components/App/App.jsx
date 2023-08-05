@@ -40,15 +40,11 @@ export class App extends Component {
     }
   }
 
-  //   setState(prevState => {
-  //   this.state;
-  // });
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.contacts !== prevState.contacts) {
-  //     localStorage.setItem('phonebook', JSON.stringify(this.state.contacts));
-  //   }
-  // }
+  componentDidUpdate(prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      this.saveLocalStorage('phonebook', this.state.contacts);
+    }
+  }
 
   saveLocalStorage = (key, value) => {
     try {
@@ -77,11 +73,6 @@ export class App extends Component {
   };
 
   onSubmit = dataForm => {
-    // this.formatDataState(dataForm);
-    // if (!dataForm.name) {
-    // console.log('dataForm :>> ', dataForm);
-    // return;
-    // }
     const searchResult = this.searchContact(dataForm);
     if (!searchResult) {
       this.setState(prevState => ({
