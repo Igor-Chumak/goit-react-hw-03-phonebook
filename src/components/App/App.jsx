@@ -3,6 +3,10 @@ import { nanoid } from 'nanoid';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyles, darkTheme, lightTheme, theme } from 'styles';
 import {
+  loadFromLocalStorage,
+  saveToLocalStorage,
+} from 'utilities/localStorage';
+import {
   Header,
   Section,
   CreateThemeSwitcher,
@@ -31,30 +35,23 @@ export class App extends Component {
     notification: '',
   };
 
-  loadFromLocalStorage = key => {
-    return JSON.parse(localStorage.getItem(key));
-  };
-  saveToLocalStorage = (key, value) => {
-    return localStorage.setItem(key, JSON.stringify(value));
-  };
-
   componentDidMount() {
-    const contactsLocalStorage = this.loadFromLocalStorage(localStorageKey);
+    const contactsLocalStorage = loadFromLocalStorage(localStorageKey);
     if (contactsLocalStorage) {
       this.setState({ contacts: [...contactsLocalStorage] });
     }
-    const themeLocalStorage = this.loadFromLocalStorage(localStorageTheme);
+    const themeLocalStorage = loadFromLocalStorage(localStorageTheme);
     if (themeLocalStorage === 'light' || themeLocalStorage === 'dark') {
       this.setState({ modeTheme: themeLocalStorage });
     }
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.state.contacts !== prevState.contacts) {
-      this.saveToLocalStorage(localStorageKey, this.state.contacts);
+      saveToLocalStorage(localStorageKey, this.state.contacts);
     }
     if (this.state.modeTheme !== prevState.modeTheme) {
-      this.saveToLocalStorage(localStorageTheme, this.state.modeTheme);
+      saveToLocalStorage(localStorageTheme, this.state.modeTheme);
     }
   }
 
