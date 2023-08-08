@@ -21,6 +21,7 @@ const INITIAL_STATE = [
 ];
 
 const localStorageKey = 'phonebook';
+const localStorageTheme = localStorageKey + '_theme';
 
 export class App extends Component {
   state = {
@@ -30,26 +31,30 @@ export class App extends Component {
     notification: '',
   };
 
+  loadFromLocalStorage = key => {
+    return JSON.parse(localStorage.getItem(key));
+  };
+  saveToLocalStorage = (key, value) => {
+    return localStorage.setItem(key, JSON.stringify(value));
+  };
+
   componentDidMount() {
-    const contactsLocalStorage = JSON.parse(
-      localStorage.getItem(localStorageKey)
-    );
+    const contactsLocalStorage = this.loadFromLocalStorage(localStorageKey);
     if (contactsLocalStorage) {
       this.setState({ contacts: [...contactsLocalStorage] });
-    } else {
-      localStorage.setItem(
-        localStorageKey,
-        JSON.stringify(this.state.contacts)
-      );
+    }
+    const themeLocalStorage = this.loadFromLocalStorage(localStorageTheme);
+    if (themeLocalStorage === 'light' || themeLocalStorage === 'dark') {
+      this.setState({ modeTheme: themeLocalStorage });
     }
   }
 
   componentDidUpdate(prevState) {
     if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem(
-        localStorageKey,
-        JSON.stringify(this.state.contacts)
-      );
+      this.saveToLocalStorage(localStorageKey, this.state.contacts);
+    }
+    if (this.state.modeTheme !== prevState.modeTheme) {
+      this.saveToLocalStorage(localStorageTheme, this.state.modeTheme);
     }
   }
 
