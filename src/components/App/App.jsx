@@ -46,7 +46,7 @@ export class App extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     if (this.state.contacts !== prevState.contacts) {
       saveToLocalStorage(localStorageKey, this.state.contacts);
     }
